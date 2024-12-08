@@ -2,9 +2,15 @@ import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@clerk/nextjs/server";
 import { redis } from "@/lib/redis";
 
+interface RouteContext {
+  params: {
+    id: string;
+  };
+}
+
 export async function GET(
-  req: NextRequest,
-  context: { params: { id: string } }
+  request: NextRequest,
+  { params }: RouteContext
 ) {
   const authResult = await auth();
   const { userId } = authResult;
@@ -13,7 +19,7 @@ export async function GET(
   }
 
   try {
-    const stored = await redis.get(context.params.id);
+    const stored = await redis.get(params.id);
     if (!stored) {
       return NextResponse.json({ error: "Plan not found" }, { status: 404 });
     }
