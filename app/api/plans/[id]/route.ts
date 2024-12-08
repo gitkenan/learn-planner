@@ -4,7 +4,7 @@ import { redis } from "@/lib/redis";
 
 export async function GET(
   req: NextRequest,
-  { params }: { params: { id: string } }
+  context: { params: { id: string } }
 ) {
   const authResult = await auth();
   const { userId } = authResult;
@@ -13,7 +13,7 @@ export async function GET(
   }
 
   try {
-    const stored = await redis.get(params.id);
+    const stored = await redis.get(context.params.id);
     if (!stored) {
       return NextResponse.json({ error: "Plan not found" }, { status: 404 });
     }
