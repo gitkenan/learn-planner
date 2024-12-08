@@ -1,7 +1,3 @@
-interface AIRequest {
-  prompt: string;
-}
-
 export async function generatePlan(topic: string): Promise<string[]> {
   const prompt = `Create a concise learning plan for the topic: ${topic}`;
   

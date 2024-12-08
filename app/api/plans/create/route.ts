@@ -1,10 +1,11 @@
 import { NextRequest, NextResponse } from "next/server";
-import { auth } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
 import { redis } from "@/lib/redis";
 import { generatePlan } from "@/lib/ai";
 
 export async function POST(req: NextRequest) {
-  const { userId } = auth();
+  const authResult = await auth();
+  const { userId } = authResult;  if (!userId) {
   if (!userId) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
@@ -35,3 +36,4 @@ export async function POST(req: NextRequest) {
     );
   }
 }
+};
